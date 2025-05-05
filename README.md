@@ -137,7 +137,7 @@ This project is licensed under the **Ulster University License**.
 
 ## 📬 Contact
 - Your Name: [Sulaimon Olasupo](mailto:olasupooladotun6@gmail.com)
-- Repository URL: [https://github.com/Ola-Domain/Q-Learning-Grid-World](https://github.com/Ola-Domain/Q-Learning-Grid-World)
+- Repository URL: [https://github.com/Ola-Domain/grid_world.git](https://github.com/Ola-Domain/grid_world.git)
 
 ---
 
