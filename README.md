@@ -1,145 +1,178 @@
+Here’s the **updated README** that includes the new stress testing, hyperparameter sweep, and evaluation graphs you ran — this integrates everything you’ve worked hard on:
+
+---
+
 # Deep Q-Learning GridWorld Agent
 
-This project is a visual and interactive implementation of a **Q-Learning agent** solving a 5x5 **GridWorld** environment using **Reinforcement Learning (RL)**. Built with **Python** and **Pygame**, it features custom textures, sound effects, and a responsive stats HUD to monitor the agent's learning process in real time.
+This project is a **visual, interactive, and analytics-rich implementation** of a **Q-Learning agent** solving a 5×5 **GridWorld** environment using **Reinforcement Learning (RL)**. Built with **Python**, **Pygame**, and **Seaborn/Matplotlib**, it features live visualizations, sound effects, and deep evaluation metrics to track the agent’s learning process.
 
 ---
 
 ## 🧠 What is Reinforcement Learning?
-Reinforcement Learning is a type of Machine Learning where an agent learns to make decisions by interacting with an environment to maximize cumulative rewards. In this project:
 
-- The agent learns **which actions lead to better long-term outcomes**.
-- A **Q-table** is used to store expected rewards (Q-values) for each state-action pair.
-- The agent uses an **epsilon-greedy strategy** to balance **exploration** (trying new actions) and **exploitation** (choosing the best known action).
+Reinforcement Learning (RL) is a branch of Machine Learning where an agent learns to make decisions by interacting with an environment to maximise cumulative rewards. In this project:
+
+* The agent learns **which actions lead to the highest long-term gains**.
+* A **Q-table** stores estimated rewards (Q-values) for each state-action pair.
+* An **epsilon-greedy strategy** balances **exploration** (trying new things) and **exploitation** (using known best actions).
 
 ---
 
 ## ✨ Features
-- ✅ 5x5 bounded GridWorld
-- ✅ Special Jump from (2,4) → (4,4) with +5 reward
-- ✅ Terminal state at (5,5) with +10 reward
-- ✅ Obstacles block movement
-- ✅ Q-learning with dynamic epsilon decay
-- ✅ Visual grid with sprite-based rendering and digital dashboard
-- ✅ Sound effects for terminal and jump events
-- ✅ Reward, average reward, epsilon, and time per episode displayed
-- ✅ Trail of visited cells drawn during each episode
-- ✅ Early stopping if average reward over 30 episodes > 10
+
+* ✅ 5×5 bounded GridWorld
+* ✅ Special Jump (2,4 → 4,4) with +5 reward
+* ✅ Terminal goal (5,5) with +10 reward
+* ✅ Obstacles blocking movement
+* ✅ Tabular Q-learning with dynamic epsilon decay
+* ✅ Sound effects on jump and goal events
+* ✅ Sprite-based grid with live HUD showing stats
+* ✅ Automatic early stopping when avg reward >10 over 30 episodes
+* ✅ Stress tests: no jump, random obstacles
+* ✅ Hyperparameter sweep on α, γ, ε-decay
+* ✅ Plots and heatmaps for learning curves, epsilon decay, convergence
 
 ---
 
 ## 📁 File Structure
+
 ```
 DeepQ-GridWorld/
 ├── assets/
-│   ├── agent.png
-│   ├── background.png
-│   ├── goal.png
-│   ├── jump.png
-│   ├── obstacle.png
-│   ├── goal.wav
-│   └── jump.wav
-├── config.py              # Environment settings
-├── environment.py         # Step function and grid logic
-├── q_learning.py          # Q-table learning agent
-├── game.py                # Pygame rendering and HUD
-├── main.py                # Main training loop
+├── config.py
+├── environment.py
+├── q_learning.py
+├── game.py
+├── main.py
+├── stress_test_sweep.py
+├── plot_sweep_results.py
+├── results/
+│   ├── q_table.json
+│   ├── policy_map.png
+│   ├── value_heatmap.png
+│   ├── sweep_results.json
+│   ├── [training graphs].png
 └── README.md
 ```
 
 ---
 
-## 🚀 Installation & Setup
-### 🔹 Step 1: Clone the Repository
-```bash
-git clone https://github.com/Ola-Domain/QGridWorld.git
-cd QGridWorld
-```
+## 🚀 Setup & Run
 
-### 🔹 Step 2: Install Dependencies
 ```bash
-pip install pygame
-```
-
-### 🔹 Step 3: Run the Simulator
-```bash
+git clone https://github.com/Ola-Domain/grid_world.git
+cd grid_world
+pip install pygame pandas matplotlib seaborn
 python main.py
 ```
-
-You will see a live rendering of the GridWorld, the agent moving step by step, and training statistics at the bottom.
 
 ---
 
 ## 🎯 Environment Rules
-- Grid Size: 5×5
-- Start: (2, 1)
-- Terminal: (5, 5) — reward +10
-- Special Jump: (2, 4) → (4, 4) — reward +5
-- Obstacles: (3,3), (4,3), (3,4), (3,5)
-- All other movements: reward -1
-- Actions:
-  - North = 1
-  - South = 2
-  - East = 3
-  - West = 4
+
+* **Grid Size:** 5×5
+* **Start:** (2,1)
+* **Terminal:** (5,5), reward +10
+* **Jump Tile:** (2,4 → 4,4), reward +5
+* **Obstacles:** (3,3), (4,3), (3,4), (3,5)
+* **Other moves:** reward -1
+* **Actions:** North=1, South=2, East=3, West=4
 
 ---
 
-## 🤖 Q-Learning Details
-- Q(s, a) ← Q(s, a) + α [r + γ max(Q(s', a')) - Q(s, a)]
-- **Learning Rate (α)** = how fast we update
-- **Discount Factor (γ)** = how much future rewards matter
-- **Epsilon (ε)** = exploration rate; decays over episodes
-- Q-table is initialized empty and updated through interactions
+## 🤖 Q-Learning Summary
+
+* Update rule:
+  *Q(s,a) ← Q(s,a) + α \[r + γ max(Q(s',a')) − Q(s,a)]*
+* Parameters:
+
+  * Learning rate (α): how fast Q-values update
+  * Discount factor (γ): weight on future rewards
+  * Epsilon (ε): exploration rate, decays over time
+* Q-table initialized to zero, updated each step
 
 ---
 
-## 📊 Live Training Stats
-- 🔁 Episode number
-- 📈 Total reward in current episode
-- 📉 Epsilon value (exploration vs exploitation)
-- 📊 Avg reward over last 30 episodes
-- ⏱️ Avg time per episode
-- 💡 Displayed in a styled digital HUD at the bottom of the screen
+## 📊 Evaluation and Results
+
+* **Live Metrics in HUD:**
+
+  * Episode number
+  * Total reward
+  * Epsilon value
+  * Average reward over last 30 episodes
+  * Average episode time
+
+* **Generated Outputs:**
+
+  * 🎉 `results/q_table.json`
+  * 📽️ `results/final_episode_replay.mp4`
+  * 🧭 `results/policy_map.png`
+  * 🌡️ `results/value_heatmap.png`
+
+* **Stress Testing & Hyperparameter Sweep:**
+
+  * Baseline, no-jump, random-obstacle variants
+  * Learning curves, epsilon decay, convergence plots
+  * Alpha/gamma sweep with heatmaps
+
+---
+
+## 📈 Evaluation Plots
+
+* Learning curve: total reward per episode
+* Epsilon decay curve: exploration → exploitation
+* Winning percentage over episodes
+* Total reward vs. steps
+* Average steps per episode
+* Q-value distribution
+* Final policy map (best action per state)
+* Hyperparameter sweep: heatmaps and bar plots
 
 ---
 
 ## 🔧 Customization Tips
-- 🎨 Replace textures in `assets/` to change visuals
-- 🎼 Add your own `.wav` sound files for jumps or goals
-- ⚙️ Tune learning rate, gamma, and epsilon decay in `q_learning.py`
-- 🧠 Modify reward scheme in `environment.py` for experimentation
+
+* Replace textures and sounds in `assets/`
+* Modify hyperparameters in `q_learning.py`
+* Change reward settings in `environment.py`
+* Extend with Deep Q-Network (DQN) in future
 
 ---
 
-## 💡 Future Work
-- 🔄 Save and load the Q-table to persist learning progress
-- 🧭 Visualize the learned policy with arrows or directional cues
-- 📈 Export stats/logs to CSV for offline analysis
-- 🌀 Add stochasticity to rewards or state transitions
-- 🧠 Implement Deep Q-Network (DQN) with neural network function approximation
-- 🎞️ Record agent movement into video/GIF for presentations
-- 🕹️ Add keyboard-controlled manual mode for comparison
+## 💥 Future Work
+
+* Save/load Q-table between runs
+* Add stochastic rewards or transitions
+* Implement ablation tests (disable jump, random obstacles)
+* Integrate DQN with neural networks
+* Record gameplay videos/GIFs
+* Add manual mode for human-agent comparison
 
 ---
 
 ## 📌 References
-- Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction* (2nd ed.). MIT Press.
-- Watkins, C. J. C. H., & Dayan, P. (1992). *Q-learning*. Machine Learning, 8(3-4), 279–292.
-- OpenAI Gym Documentation: https://www.gymlibrary.dev/
-- Pygame Docs: https://www.pygame.org/docs/
 
----
-
-## 🛡️ License
-This project is licensed under the **Ulster University License**.
+* Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction* (2nd ed.)
+* Watkins, C. J. C. H., & Dayan, P. (1992). *Q-learning*. Machine Learning, 8(3–4), 279–292
+* Ulster University COM762 Lecture Slides (2024)
+* GitHub: [https://github.com/Ola-Domain/grid\_world](https://github.com/Ola-Domain/grid_world)
 
 ---
 
 ## 📬 Contact
-- Your Name: [Sulaimon Olasupo](mailto:olasupooladotun6@gmail.com)
-- Repository URL: [https://github.com/Ola-Domain/grid_world.git](https://github.com/Ola-Domain/grid_world.git)
+
+* **Sulaimon Oladotun Olasupo**
+* 
+  Computer Science and Technology
+  Ulster University, Birmingham, UK
+* 📧 [olasupooladotun6@gmail.com](mailto:olasupooladotun6@gmail.com)
+* 
+  💻 [GitHub Repository](https://github.com/Ola-Domain/grid_world)
 
 ---
 
-Happy Training! 🧠🕹️🎯
+Happy training, testing, and breaking your agents! 🧠🎯🔥
+
+---
 
